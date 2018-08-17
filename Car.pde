@@ -1,29 +1,42 @@
 class Car{
+  boolean acc = false, left = false, right = false;
   PVector pos;
   PVector vel;
-  PVector acc;
-  float heading;
+  float drag = 0.98;
+  float angle = 0;
+  float angularVelocity = 0;
+  float angularDrag = 0.9;
+  float power = 1.0;
+  float turnSpeed = 0.1;
   
   Car(int x, int y){
     pos = new PVector(x, y);
     vel = new PVector(0, 0);
-    acc = new PVector(0, 0);
   }
   
   void update(){
-    heading = vel.heading();
-    vel.add(acc);
+    if(acc){
+      print("acc");
+      PVector delta = PVector.fromAngle(angle);
+      delta.mult(power);
+      vel.add(delta);
+    }
+    if(left){
+      angularVelocity -= turnSpeed;
+    }
+    if(right){
+      angularVelocity += turnSpeed;
+    }
     pos.add(vel);
-  }
-  
-  void move(){
-    
+    vel.mult(drag);
+    angle += angularVelocity;
+    angularVelocity *= angularDrag;
   }
   
   void show(){
     pushMatrix();
     translate(pos.x, pos.y);
-    rotate(heading);
+    rotate(angle);
     rect(0, 0, 40, 20);
     popMatrix();
   }
