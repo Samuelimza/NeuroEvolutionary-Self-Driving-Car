@@ -16,6 +16,10 @@ class Car{
     pos.add(vel);
   }
   
+  void move(){
+    
+  }
+  
   void show(){
     pushMatrix();
     translate(pos.x, pos.y);
