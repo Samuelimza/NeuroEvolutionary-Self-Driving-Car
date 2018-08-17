@@ -6,8 +6,8 @@ class Car{
   float angle = 0;
   float angularVelocity = 0;
   float angularDrag = 0.9;
-  float power = 1.0;
-  float turnSpeed = 0.1;
+  float power = 0.1;
+  float turnSpeed = 0.01;
   
   Car(int x, int y){
     pos = new PVector(x, y);
@@ -16,16 +16,15 @@ class Car{
   
   void update(){
     if(acc){
-      print("acc");
       PVector delta = PVector.fromAngle(angle);
       delta.mult(power);
       vel.add(delta);
     }
     if(left){
-      angularVelocity -= turnSpeed;
+      angularVelocity += turnSpeed;
     }
     if(right){
-      angularVelocity += turnSpeed;
+      angularVelocity -= turnSpeed;
     }
     pos.add(vel);
     vel.mult(drag);

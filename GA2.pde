@@ -23,16 +23,15 @@ void keyPressed(){
     a.right = true;
   }
 }
-/*
+
 void keyReleased(){
   if(key == 'w'){
-    a.acc = true;
+    a.acc = false;
   }
   if(key == 'd'){
-    a.left = true;
+    a.left = false;
   }
   if(key == 'a'){
-    a.right = true;
+    a.right = false;
   }
 }
-*/
