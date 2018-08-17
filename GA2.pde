@@ -1,7 +1,7 @@
 Car a = new Car(100, 100);
 
 void setup(){
- size(400, 400);
+ size(700, 700);
  rectMode(CENTER);
  fill(255, 50, 50);
  noStroke();
