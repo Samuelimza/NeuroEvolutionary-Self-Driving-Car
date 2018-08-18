@@ -10,9 +10,10 @@ class NNetwork{
   }
   
   int[][] feedFoward(int[][] input){
-    int[][] l1;
-    l1 = matrixMult(input, weights[0]);
-    return l1;
+    int[][] l1 = matrixMult(input, weights[0]);
+    int[][] l2 = matrixMult(l1, weights[1]);
+    int[][] output = matrixMult(l2, weights[2]);
+    return output;
   }
   
   int[][] matrixMult(int[][] a, int[][] b){
