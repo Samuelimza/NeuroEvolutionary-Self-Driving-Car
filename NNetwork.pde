@@ -16,10 +16,10 @@ class NNetwork{
     }
   }
   
-  float[][] feedFoward(float[][] input){
-    float[][] l1 = matrixMult(input, weights[0]);
-    float[][] l2 = matrixMult(l1, weights[1]);
-    float[][] output = matrixMult(l2, weights[2]);
+  float[][] feedForward(float[][] input){
+    float[][] l1 = matrixMult(weights[0], input);
+    float[][] l2 = matrixMult(weights[1], l1);
+    float[][] output = matrixMult(weights[2], l2);
     return output;
   }
   
