@@ -5,7 +5,7 @@ class Car{
   float drag = 0.98;
   float angle = 0;
   float angularVelocity = 0;
-  float angularDrag = 0.9;
+  float angularDrag = 0.925;
   float power = 0.05;
   float turnSpeed = 0.01;
   float braking = 0.95;
@@ -37,15 +37,32 @@ class Car{
     angularVelocity *= angularDrag;
   }
   
+  void findDistance(PVector heading){
+    boolean found = false;
+    PVector posCopy = this.pos.copy();
+    heading.setMag(1);
+    for(int i = 0; i < 100; i++){
+      if(myMap.pixels[(int)posCopy.x + ((int)posCopy.y) * width] == -16777216){
+        fill(255, 0, 0);
+        ellipse(posCopy.x, posCopy.y, 5, 5);
+        break;
+      }
+      posCopy.add(heading);
+    }
+  }
+  
   void drawSensors(){
     PVector heading = PVector.fromAngle(angle - PI / 6);
     heading.mult(100);
     stroke(200, 100, 60);
     line(pos.x, pos.y, pos.x + heading.x, pos.y + heading.y);
+    findDistance(heading.copy());
     heading.rotate(PI / 3);
     line(pos.x, pos.y, pos.x + heading.x, pos.y + heading.y);
+    findDistance(heading.copy());
     heading.rotate(-PI / 6);
     line(pos.x, pos.y, pos.x + heading.x, pos.y + heading.y);
+    findDistance(heading.copy());
   }
   
   void show(){
