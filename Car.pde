@@ -42,6 +42,7 @@ class Car{
     vel.mult(drag);
     angle += angularVelocity;
     angularVelocity *= angularDrag;
+    //if controlled by neural network and colliding with walls the die
     if(notOnTrack() && !manual){
       dead = true;
     }

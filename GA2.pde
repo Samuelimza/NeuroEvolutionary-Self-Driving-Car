@@ -6,6 +6,7 @@ boolean manual = true;
 
 void setup(){
  size(600, 600);
+ //create font object of arial with 30 size
  f = createFont("Arial", 30, true);
  rectMode(CENTER);
  noStroke();
