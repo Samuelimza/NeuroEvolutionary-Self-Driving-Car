@@ -44,6 +44,8 @@ void draw(){
 void keyPressed(){
   if(key == 'w'){
     a.acc = true;
+  }else if(key == 's'){
+    a.decc = true;
   }
   if(key == 'd'){
     a.left = true;
@@ -55,6 +57,8 @@ void keyPressed(){
 void keyReleased(){
   if(key == 'w'){
     a.acc = false;
+  }else if(key == 's'){
+    a.decc = false;
   }
   if(key == 'd'){
     a.left = false;
