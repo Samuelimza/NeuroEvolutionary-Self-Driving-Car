@@ -1,11 +1,15 @@
 Car a = new Car(100, 100);
 NNetwork n = new NNetwork();
+PImage map;
 
 void setup(){
- size(700, 700);
+ size(600, 600);
  rectMode(CENTER);
  fill(255, 50, 50);
  noStroke();
+ map = loadImage("Map.png");
+ map.loadPixels();
+ /*
  println();
  for(int i = 0; i < n.weights.length; i++){
    for(int j = 0; j < n.weights[i].length; j++){
@@ -17,6 +21,7 @@ void setup(){
    println();
  }
  println();
+ */
  
  float[][] testInput = new float[3][1];
  testInput[0][0] = 1.0;
@@ -30,7 +35,8 @@ void setup(){
 }
 
 void draw(){
- background(51);
+ //background(51);
+ background(map);
  a.update();
  a.show();
 }

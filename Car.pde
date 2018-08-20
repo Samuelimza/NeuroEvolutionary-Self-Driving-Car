@@ -6,7 +6,7 @@ class Car{
   float angle = 0;
   float angularVelocity = 0;
   float angularDrag = 0.9;
-  float power = 0.2;
+  float power = 0.05;
   float turnSpeed = 0.01;
   
   Car(int x, int y){
@@ -36,7 +36,7 @@ class Car{
     pushMatrix();
     translate(pos.x, pos.y);
     rotate(angle);
-    rect(0, 0, 40, 20);
+    rect(0, 0, 20, 10);
     popMatrix();
   }
 }
