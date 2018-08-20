@@ -1,17 +1,16 @@
-Car a = new Car(100, 100);
+Car a = new Car(370, 30);
 NNetwork n = new NNetwork();
 PImage myMap;
 PFont f;
+boolean manual = true;
 
 void setup(){
  size(600, 600);
- f = createFont("Arial", 16, true);
+ f = createFont("Arial", 30, true);
  rectMode(CENTER);
- fill(255, 50, 50);
  noStroke();
  myMap = loadImage("Map.png");
  myMap.loadPixels();
- print(myMap.pixels[300 + 5 * 600]);
  /*
  println();
  for(int i = 0; i < n.weights.length; i++){
@@ -39,16 +38,28 @@ void setup(){
 
 void draw(){
  //background(51);
- textFont(f, 30);
+ background(myMap);
+ textFont(f);
  stroke(4);
  fill(187, 252, 184, 150);
- text("X: " + a.pos.x + ", Y: " + a.pos.y, 10, 40);
- background(myMap);
- a.update();
+ text("X: " + (int)a.pos.x + ", Y: " + (int)a.pos.y, 10, 40);
+ if(!a.dead){
+   a.update();
+ }
  a.show();
 }
 
 void keyPressed(){
+  if(key == 'm'){
+    manual = !manual;
+    if(manual){
+      a.dead = false;
+      a.acc = false;
+      a.decc = false;
+      a.left = false;
+      a.right = false;
+    }
+  }
   if(key == 'w'){
     a.acc = true;
   }else if(key == 's'){
