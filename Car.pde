@@ -7,7 +7,7 @@ class Car{
   float drag = 0.98;
   float angle = PI;
   float angularVelocity = 0;
-  float angularDrag = 0.925;
+  float angularDrag = 0.9;
   float power = 0.05;
   float turnSpeed = 0.01;
   float braking = 0.95;
@@ -42,7 +42,7 @@ class Car{
     vel.mult(drag);
     angle += angularVelocity;
     angularVelocity *= angularDrag;
-    //if controlled by neural network and colliding with walls the die
+    //if controlled by neural network and colliding with walls then die
     if(notOnTrack() && !manual){
       dead = true;
     }
@@ -54,7 +54,13 @@ class Car{
     int index1 = (int)pos.x - 7 + (int)pos.y * width;
     int index2 = (int)pos.x + (int)(pos.y + 7) * width;
     int index3 = (int)pos.x + (int)(pos.y - 7) * width;
-    if(myMap.pixels[index0] == -16777216 || myMap.pixels[index1] == -16777216 || myMap.pixels[index2] == -16777216 || myMap.pixels[index3] == -16777216){
+    boolean condition0 = index0 < 0 || index1 < 0 || index2 < 0 || index3 < 0;
+    boolean condition1 = index0 >= myMap.pixels.length || index1 >= myMap.pixels.length || index2 >= myMap.pixels.length || index3 >= myMap.pixels.length;
+    if(!condition0 && !condition1){
+      if(myMap.pixels[index0] == -16777216 || myMap.pixels[index1] == -16777216 || myMap.pixels[index2] == -16777216 || myMap.pixels[index3] == -16777216){
+        return true;
+      }
+    }else{
       return true;
     }
     return false;
