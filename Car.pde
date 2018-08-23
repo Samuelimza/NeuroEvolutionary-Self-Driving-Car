@@ -1,17 +1,25 @@
 class Car{
-  NNetwork neuralNetwork;
+  //physics attributes
   boolean dead = false;
   boolean acc = false, left = false, right = false, decc = false;
   PVector pos;
   PVector vel;
-  float drag = 0.98;
+  float drag = 0.96;
   float angle = PI;
   float angularVelocity = 0;
   float angularDrag = 0.9;
   float power = 0.05;
   float turnSpeed = 0.01;
   float braking = 0.95;
+  
+  //Neural attributes
+  NNetwork neuralNetwork;
   float[][] proximity;
+ 
+  //Genetic attributes
+  float fitness;
+  float mutationRate;
+  int colorComponent = (int)random(170);
   
   Car(int x, int y){
     pos = new PVector(x, y);
@@ -21,30 +29,32 @@ class Car{
   }
   
   void update(){
-    drawSensors();
-    if(!manual){
-      setControls();
-    }
-    if(acc){
-      PVector delta = PVector.fromAngle(angle);
-      delta.mult(power);
-      vel.add(delta);
-    }else if(decc){
-      vel.mult(braking);
-    }
-    if(left){
-      angularVelocity += turnSpeed;
-    }
-    if(right){
-      angularVelocity -= turnSpeed;
-    }
-    pos.add(vel);
-    vel.mult(drag);
-    angle += angularVelocity;
-    angularVelocity *= angularDrag;
-    //if controlled by neural network and colliding with walls then die
-    if(notOnTrack() && !manual){
-      dead = true;
+    if(!dead){
+      drawSensors();
+      if(!manual){
+        setControls();
+      }
+      if(acc){
+        PVector delta = PVector.fromAngle(angle);
+        delta.mult(power);
+        vel.add(delta);
+      }else if(decc){
+        vel.mult(braking);
+      }
+      if(left){
+        angularVelocity += turnSpeed;
+      }
+      if(right){
+        angularVelocity -= turnSpeed;
+      }
+      pos.add(vel);
+      vel.mult(drag);
+      angle += angularVelocity;
+      angularVelocity *= angularDrag;
+      //if controlled by neural network and colliding with walls then die
+      if(notOnTrack() && !manual){
+        dead = true;
+      }
     }
   }
   
@@ -69,7 +79,7 @@ class Car{
   //setControls sets the inputs to car based on the neural networks output in the not manual mode
   void setControls(){
     float[][] directions = neuralNetwork.feedForward(proximity);
-    println(directions[0][0] + "," + directions[1][0] + "," + directions[2][0] + "," + directions[3][0]);
+    //println(directions[0][0] + "," + directions[1][0] + "," + directions[2][0] + "," + directions[3][0]);
     if(directions[0][0] >= 0.5){
       acc = true;
     }else{
@@ -133,7 +143,7 @@ class Car{
   void show(){
     noStroke();
     pushMatrix();
-    fill(255, 50, 50);
+    fill(255, colorComponent, colorComponent);
     translate(pos.x, pos.y);
     rotate(angle);
     rect(0, 0, 20, 10);

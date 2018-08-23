@@ -1,39 +1,24 @@
-Car a = new Car(370, 30);
-NNetwork n = new NNetwork();
+int noOfCars = 20;
+Car[] cars = new Car[noOfCars];
+GeneticAlgorithm ga = new GeneticAlgorithm();
 PImage myMap;
+
+//test Car
+Car a = new Car(370, 30);
 PFont f;
-boolean manual = true;
+boolean manual = false;
 
 void setup(){
  size(600, 600);
+ textAlign(LEFT, TOP);
  //create font object of arial with 30 size
- f = createFont("Arial", 30, true);
+ f = createFont("Arial", 25, true);
  rectMode(CENTER);
  noStroke();
  myMap = loadImage("Map.png");
  myMap.loadPixels();
- /*
- println();
- for(int i = 0; i < n.weights.length; i++){
-   for(int j = 0; j < n.weights[i].length; j++){
-     for(int k = 0; k < n.weights[i][j].length; k++){
-       print(n.weights[i][j][k]);
-     }
-     println();
-   }
-   println();
- }
- */
- println();
- 
- float[][] testInput = new float[3][1];
- testInput[0][0] = 1.0;
- testInput[1][0] = 1.0;
- testInput[2][0] = 1.0;
- 
- float[][] output = n.feedForward(testInput);
- for(int i = 0; i < 4; i++){
-    println(output[i][0]);
+ for(int i = 0; i < cars.length; i++){
+   cars[i] = new Car(370, 30);
  }
 }
 
@@ -43,10 +28,12 @@ void draw(){
  textFont(f);
  stroke(4);
  fill(187, 252, 184, 150);
- text("X: " + (int)a.pos.x + ", Y: " + (int)a.pos.y, 10, 40);
- if(!a.dead){
-   a.update();
+ text("X: " + (int)a.pos.x + ", Y: " + (int)a.pos.y, 0, 0);
+ for(int i = 0; i < cars.length; i++){
+   cars[i].update();
+   cars[i].show();
  }
+ a.update();
  a.show();
 }
 
