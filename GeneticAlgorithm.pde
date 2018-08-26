@@ -7,7 +7,8 @@ class GeneticAlgorithm{
   void reproduce(){
     Car[] nextGenCars = new Car[noOfCars];
     for(int i = 0; i < cars.length; i++){
-      nextGenCars[i] = chooseParent();
+      nextGenCars[i] = new Car(370, 30);
+      nextGenCars[i].neuralNetwork = new NNetwork(chooseParent().neuralNetwork);
       mutate(nextGenCars[i]);
     }
     cars = nextGenCars;

@@ -36,6 +36,9 @@ void draw(){
    cars[i].update();
    cars[i].show();
  }
+ if(ga.allDead(cars)){
+   ga.reproduce();
+ }
  for(int i = 0; i < markers.size(); i++){
    markers.get(i).show();
  }
@@ -53,6 +56,9 @@ void loadMarkers(String path){
 }
 
 void keyPressed(){
+  if(key == ' '){
+    ga.reproduce();
+  }
   if(key == 'm'){
     ga.saveGeneration(cars);
     manual = !manual;

@@ -17,9 +17,10 @@ class Car{
   float[][] proximity;
  
   //Genetic attributes
-  float fitness;
-  float mutationRate;
+  float fitness = 0;
+  float mutationRate = 0.01;
   int colorComponent = (int)random(170);
+  int previousMarkerIndex = -1;
   
   Car(int x, int y){
     pos = new PVector(x, y);
@@ -29,6 +30,7 @@ class Car{
   }
   
   void update(){
+    updateMarkerStatus();
     if(!dead){
       drawSensors();
       if(!manual){
@@ -54,6 +56,22 @@ class Car{
       //if controlled by neural network and colliding with walls then die
       if(notOnTrack() && !manual){
         dead = true;
+      }
+    }
+  }
+  
+  void updateMarkerStatus(){
+    for(int i = 0; i < markers.size(); i++){
+      Marker current = markers.get(i);
+      if(current.colliding(this)){
+        if(previousMarkerIndex == -1 || current.index == previousMarkerIndex + 1){
+          fitness = current.score;
+          previousMarkerIndex = current.index;
+        }else if(current.index == previousMarkerIndex - 1){
+          dead = true;
+          println("DIED");
+        }
+        return;
       }
     }
   }

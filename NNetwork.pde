@@ -16,6 +16,20 @@ class NNetwork{
     }
   }
   
+  NNetwork(NNetwork nn){
+    weights = new float[3][][];
+    for(int i = 0; i < weights.length; i++){
+      weights[i] = new float[this.architecture[i + 1]][this.architecture[i]];
+    }
+    for(int i = 0; i < weights.length; i++){
+      for(int j = 0; j < weights[i].length; j++){
+        for(int k = 0; k < weights[i][j].length; k++){
+          weights[i][j][k] = nn.weights[i][j][k];
+        }
+      }
+    }
+  }
+  
   float[][] feedForward(float[][] input){
     float[][] l1 = matrixMult(weights[0], input);
     float[][] l2 = matrixMult(weights[1], l1);

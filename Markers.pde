@@ -10,6 +10,13 @@ class Marker{
     this.w = w;
     this.h = h;
   }
+  
+  boolean colliding(Car car){
+    if(car.pos.x > x - w / 2 && car.pos.x < x + w / 2 && car.pos.y > y - h / 2 && car.pos.y < y + h / 2){
+      return true;
+    }
+    return false;
+  }
 
   void show(){
     rectMode(CENTER);
