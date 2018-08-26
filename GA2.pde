@@ -16,7 +16,7 @@ void setup(){
  textFont(f);
  rectMode(CENTER);
  noStroke();
- myMap = loadImage("Map.png");
+ myMap = loadImage("data/Map.png");
  myMap.loadPixels();
  for(int i = 0; i < cars.length; i++){
    cars[i] = new Car(370, 30);
