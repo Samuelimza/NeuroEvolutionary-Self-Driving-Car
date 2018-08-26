@@ -39,6 +39,7 @@ void draw(){
 
 void keyPressed(){
   if(key == 'm'){
+    ga.saveGeneration(cars);
     manual = !manual;
     if(manual){
       a.dead = false;
