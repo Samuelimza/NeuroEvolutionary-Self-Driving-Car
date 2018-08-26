@@ -24,7 +24,7 @@ class NNetwork{
     for(int i = 0; i < weights.length; i++){
       for(int j = 0; j < weights[i].length; j++){
         for(int k = 0; k < weights[i][j].length; k++){
-          weights[i][j][k] = nn.weights[i][j][k];
+          this.weights[i][j][k] = nn.weights[i][j][k];
         }
       }
     }

@@ -4,8 +4,6 @@ GeneticAlgorithm ga = new GeneticAlgorithm();
 ArrayList<Marker> markers;
 PImage myMap;
 
-//test Car
-Car a = new Car(370, 30);
 PFont f;
 boolean manual = false;
 
@@ -31,19 +29,15 @@ void draw(){
  background(myMap);
  stroke(4);
  fill(187, 252, 184, 150);
- text("X: " + (int)a.pos.x + ", Y: " + (int)a.pos.y, 0, 0);
+ text("Gen: " + ga.generation, 0, 0);
  for(int i = 0; i < cars.length; i++){
    cars[i].update();
    cars[i].show();
  }
- if(ga.allDead(cars)){
-   ga.reproduce();
- }
+ ga.update();
  for(int i = 0; i < markers.size(); i++){
    markers.get(i).show();
  }
- a.update();
- a.show();
 }
 
   
@@ -62,36 +56,9 @@ void keyPressed(){
   if(key == 'm'){
     ga.saveGeneration(cars);
     manual = !manual;
-    if(manual){
-      a.dead = false;
-      a.acc = false;
-      a.decc = false;
-      a.left = false;
-      a.right = false;
-    }
-  }
-  if(key == 'w'){
-    a.acc = true;
-  }else if(key == 's'){
-    a.decc = true;
-  }
-  if(key == 'd'){
-    a.left = true;
-  }else if(key == 'a'){
-    a.right = true;
   }
 }
 
 void keyReleased(){
-  if(key == 'w'){
-    a.acc = false;
-  }else if(key == 's'){
-    a.decc = false;
-  }
-  if(key == 'd'){
-    a.left = false;
-  }
-  if(key == 'a'){
-    a.right = false;
-  }
+
 }

@@ -17,6 +17,7 @@ class Car{
   float[][] proximity;
  
   //Genetic attributes
+  boolean isBest = false;
   float fitness = 0;
   float mutationRate = 0.01;
   int colorComponent = (int)random(170);
@@ -30,12 +31,10 @@ class Car{
   }
   
   void update(){
-    updateMarkerStatus();
     if(!dead){
+      updateMarkerStatus();
       drawSensors();
-      if(!manual){
-        setControls();
-      }
+      setControls();
       if(acc){
         PVector delta = PVector.fromAngle(angle);
         delta.mult(power);
@@ -54,7 +53,7 @@ class Car{
       angle += angularVelocity;
       angularVelocity *= angularDrag;
       //if controlled by neural network and colliding with walls then die
-      if(notOnTrack() && !manual){
+      if(notOnTrack()){
         dead = true;
       }
     }
@@ -63,13 +62,19 @@ class Car{
   void updateMarkerStatus(){
     for(int i = 0; i < markers.size(); i++){
       Marker current = markers.get(i);
-      if(current.colliding(this)){
-        if(previousMarkerIndex == -1 || current.index == previousMarkerIndex + 1){
-          fitness = current.score;
+      if(current.colliding(this) && current.index != previousMarkerIndex){
+        if(current.index == previousMarkerIndex + 1){
+          fitness = current.score * current.score;
+          if(fitness > 1000){
+            ga.timeoutLimit = 20;
+          }
+          if(fitness > 4000){
+            ga.timeoutLimit = 30;
+          }
           previousMarkerIndex = current.index;
-        }else if(current.index == previousMarkerIndex - 1){
+        }else{
           dead = true;
-          println("DIED");
+          println("DIED" + i);
         }
         return;
       }
@@ -129,7 +134,7 @@ class Car{
       posCopy.add(heading);
       //checking if the head of the posCopy vector lies in a wall
       if(myMap.pixels[(int)posCopy.x + ((int)posCopy.y) * width] == -16777216){
-        fill(255, 0, 0);
+        //fill(255, 0, 0);
         ellipse(posCopy.x, posCopy.y, 5, 5);
         //setting the proximity value to the iteration number aka distance in the heading direction
         proximity[index][0] = i / 100.0;
@@ -162,6 +167,9 @@ class Car{
     noStroke();
     pushMatrix();
     fill(255, colorComponent, colorComponent);
+    if(isBest){
+      fill(0, 255, 0);
+    }
     translate(pos.x, pos.y);
     rotate(angle);
     rect(0, 0, 20, 10);

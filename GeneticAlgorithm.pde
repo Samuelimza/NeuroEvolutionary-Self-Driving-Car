@@ -1,12 +1,41 @@
 class GeneticAlgorithm{
   float totalFitness;
-  float maxFitness;
-  int maxFitI;
+  float maxFitness = -1;
+  int maxFitI = -1;
   int generation = 0;
+
+  int counter = 0;
+  int previousSecond = -1;
+  int timeoutLimit = 8;
+  
+  void update(){
+    int second = second();
+    if(second != previousSecond){
+      counter++;
+      previousSecond = second;
+    }
+    if(counter == timeoutLimit){
+      reproduce();
+      counter = 0;
+    }else if(allDead(cars)){
+      reproduce();
+    }
+  }
   
   void reproduce(){
-    Car[] nextGenCars = new Car[noOfCars];
+    maxFitness = 0;
     for(int i = 0; i < cars.length; i++){
+      if(cars[i].fitness > maxFitness){
+        maxFitness = cars[i].fitness;
+        maxFitI = i;
+      }
+    }
+    println("MaxFitness: " + maxFitness);
+    Car[] nextGenCars = new Car[noOfCars];
+    nextGenCars[0] = new Car(370, 30);
+    nextGenCars[0].neuralNetwork = new NNetwork(cars[maxFitI].neuralNetwork);
+    nextGenCars[0].isBest = true;
+    for(int i = 1; i < cars.length; i++){
       nextGenCars[i] = new Car(370, 30);
       nextGenCars[i].neuralNetwork = new NNetwork(chooseParent().neuralNetwork);
       mutate(nextGenCars[i]);
@@ -32,7 +61,13 @@ class GeneticAlgorithm{
       for(int j = 0; j < car.neuralNetwork.weights[i].length; j++){
         for(int k = 0; k < car.neuralNetwork.weights[i][j].length; k++){
           if(random(1) > car.mutationRate){
-            car.neuralNetwork.weights[i][j][k] = (float)(Math.random() * 2 - 1);
+            if(random(1) >= 0.5){
+              car.neuralNetwork.weights[i][j][k] += 0.1;
+              constrain(car.neuralNetwork.weights[i][j][k], -1, 1);
+            }else{
+              car.neuralNetwork.weights[i][j][k] -= 0.1;
+              constrain(car.neuralNetwork.weights[i][j][k], -1, 1);
+            }
           }
         }
       }
