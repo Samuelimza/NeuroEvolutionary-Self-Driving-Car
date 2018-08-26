@@ -4,10 +4,11 @@ class Marker{
   
   Marker(int x, int y, int w, int h, int index, int score){
     this.index = index;
+    this.score = score;
     this.x = x;
     this.y = y;
-    w = 50;
-    h = 10;
+    this.w = w;
+    this.h = h;
   }
 
   void show(){

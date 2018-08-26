@@ -1,6 +1,7 @@
 int noOfCars = 20;
 Car[] cars = new Car[noOfCars];
 GeneticAlgorithm ga = new GeneticAlgorithm();
+ArrayList<Marker> markers;
 PImage myMap;
 
 //test Car
@@ -21,6 +22,8 @@ void setup(){
  for(int i = 0; i < cars.length; i++){
    cars[i] = new Car(370, 30);
  }
+ markers = new ArrayList<Marker>();
+ loadMarkers("D:/NewFolder/Osama/Programming/Java/Processing/GA2/data");
 }
 
 void draw(){
@@ -33,8 +36,20 @@ void draw(){
    cars[i].update();
    cars[i].show();
  }
+ for(int i = 0; i < markers.size(); i++){
+   markers.get(i).show();
+ }
  a.update();
  a.show();
+}
+
+  
+void loadMarkers(String path){
+  JSONArray markersArray = loadJSONArray(path + "/markers1.json");
+  for(int i = 0; i < 22; i++){
+    JSONObject mj = markersArray.getJSONObject(i);
+    markers.add(new Marker(mj.getInt("x"), mj.getInt("y"), mj.getInt("w"), mj.getInt("h"), mj.getInt("index"), mj.getInt("score")));
+  }
 }
 
 void keyPressed(){
