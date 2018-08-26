@@ -11,8 +11,9 @@ boolean manual = false;
 void setup(){
  size(600, 600);
  textAlign(LEFT, TOP);
- //create font object of arial with 30 size
+ //create font object of arial with 25 size
  f = createFont("Arial", 25, true);
+ textFont(f);
  rectMode(CENTER);
  noStroke();
  myMap = loadImage("Map.png");
@@ -25,7 +26,6 @@ void setup(){
 void draw(){
  //background(51);
  background(myMap);
- textFont(f);
  stroke(4);
  fill(187, 252, 184, 150);
  text("X: " + (int)a.pos.x + ", Y: " + (int)a.pos.y, 0, 0);
