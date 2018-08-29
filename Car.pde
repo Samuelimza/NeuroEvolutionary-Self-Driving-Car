@@ -83,6 +83,7 @@ class Car{
       if(current.colliding(this) && current.index != previousMarkerIndex){
         if(current.index == previousMarkerIndex + 1){
           fitness = current.score * current.score;
+          ga.activity++;
           if(fitness > 1000){
             ga.timeoutLimit = 20;
           }
@@ -92,7 +93,8 @@ class Car{
           previousMarkerIndex = current.index;
         }else{
           if(previousMarkerIndex == 21 && current.index == 0){
-            fitness = 1000;
+            fitness = 1000000;
+            ga.activity++;
           }
           dead = true;
           println("DIED " + species);

@@ -5,6 +5,9 @@ class GeneticAlgorithm{
   int generation = 0;
 
   int counter = 0;
+  int activity = 0;
+  int lastActivity = 0;
+  int lastActivitySecond = second();
   int previousSecond = -1;
   int timeoutLimit = 8;
   
@@ -16,14 +19,22 @@ class GeneticAlgorithm{
       counter++;
       previousSecond = second;
     }
+    if(activity != lastActivity){
+      lastActivity = activity;
+      lastActivitySecond = second;
+    }
     if(counter >= timeoutLimit){
       reproduce();
-      println("Reproduced Due to timeout");
       counter = 0;
+      println("Reproduced Due to timeout");
     }else if(allDead(cars)){
       reproduce();
-      println("Reproduced Due to allDead");
       counter = 0;
+      println("Reproduced Due to allDead");
+    }else if(lastActivitySecond < second - 3){
+      reproduce();
+      counter = 0;
+      println("Reproduced due to No Activity");
     }
   }
   
@@ -52,6 +63,7 @@ class GeneticAlgorithm{
       println("Weights changed: " + weightsChangedCounter[i] / (noOfCars / 5) + ", species: " + i);
       weightsChangedCounter[i] = 0;
     }
+    lastActivity = second();
   }
   
   Car chooseParent(){
