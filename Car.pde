@@ -17,17 +17,35 @@ class Car{
   float[][] proximity;
  
   //Genetic attributes
+  int species;
   boolean isBest = false;
   float fitness = 0;
   float mutationRate = 0.01;
   int colorComponent = (int)random(170);
   int previousMarkerIndex = -1;
   
-  Car(int x, int y){
+  Car(int x, int y, int species){
     pos = new PVector(x, y);
     vel = new PVector(0, 0);
+    this.species = species;
     proximity = new float[3][1];
     neuralNetwork = new NNetwork();
+    if(species == 1){
+      // 1%
+      mutationRate = 0.01;
+    }else if(species == 2){
+      // 3%
+      mutationRate = 0.03;
+    }else if(species == 3){
+      // 8%
+      mutationRate = 0.08;
+    }else if(species == 4){
+      // 20%
+      mutationRate = 0.20;
+    }else if(species == 5){
+      // 100%
+      mutationRate = 1.0;
+    }
   }
   
   void update(){
@@ -73,8 +91,11 @@ class Car{
           }
           previousMarkerIndex = current.index;
         }else{
+          if(previousMarkerIndex == 21 && current.index == 0){
+            fitness = 1000;
+          }
           dead = true;
-          println("DIED" + i);
+          println("DIED " + species);
         }
         return;
       }
@@ -135,7 +156,7 @@ class Car{
       //checking if the head of the posCopy vector lies in a wall
       if(myMap.pixels[(int)posCopy.x + ((int)posCopy.y) * width] == -16777216){
         //fill(255, 0, 0);
-        ellipse(posCopy.x, posCopy.y, 5, 5);
+        //ellipse(posCopy.x, posCopy.y, 5, 5);
         //setting the proximity value to the iteration number aka distance in the heading direction
         proximity[index][0] = i / 100.0;
         return;
@@ -150,25 +171,41 @@ class Car{
     heading.mult(100);
     stroke(200, 100, 60);
     //drawing for the -30 degree sensor
-    line(pos.x, pos.y, pos.x + heading.x, pos.y + heading.y);
+    //line(pos.x, pos.y, pos.x + heading.x, pos.y + heading.y);
     findDistance(heading.copy(), 0);
     //drawing for the +30 degree sensor
     heading.rotate(PI / 3);
-    line(pos.x, pos.y, pos.x + heading.x, pos.y + heading.y);
+    //line(pos.x, pos.y, pos.x + heading.x, pos.y + heading.y);
     findDistance(heading.copy(), 2);
     //drawing for the 0 degree sensor
     heading.rotate(-PI / 6);
-    line(pos.x, pos.y, pos.x + heading.x, pos.y + heading.y);
+    //line(pos.x, pos.y, pos.x + heading.x, pos.y + heading.y);
     findDistance(heading.copy(), 1);
     //println(proximity[0][0] + ", " + proximity[1][0] + ", " + proximity[2][0]);
   }
   
   void show(){
     noStroke();
-    pushMatrix();
-    fill(255, colorComponent, colorComponent);
+    pushMatrix(); //<>//
+    if(species == 1){
+      // 1%
+      fill(255, 255, 0, 150);
+    }else if(species == 2){
+      // 3%
+      fill(0, 0, 130, 150);
+    }else if(species == 3){
+      // 8%
+      fill(0, 255, 255, 150);
+    }else if(species == 4){
+      // 20%
+      fill(0, 0, 255, 150);
+    }else if(species == 5){
+      // 100%
+      fill(255, 0, 0, 150);
+    }
     if(isBest){
-      fill(0, 255, 0);
+      //println("Best Reporting " + previousMarkerIndex);
+      fill(0, 255, 0, 150);
     }
     translate(pos.x, pos.y);
     rotate(angle);

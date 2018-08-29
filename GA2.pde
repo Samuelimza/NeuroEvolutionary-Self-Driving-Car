@@ -1,4 +1,4 @@
-int noOfCars = 20;
+int noOfCars = 50;
 Car[] cars = new Car[noOfCars];
 GeneticAlgorithm ga = new GeneticAlgorithm();
 ArrayList<Marker> markers;
@@ -18,7 +18,8 @@ void setup(){
  myMap = loadImage("data/Map.png");
  myMap.loadPixels();
  for(int i = 0; i < cars.length; i++){
-   cars[i] = new Car(370, 30);
+   int species = (i / (noOfCars / 5)) + 1;
+   cars[i] = new Car(370, 30, species);
  }
  markers = new ArrayList<Marker>();
  loadMarkers("D:/NewFolder/Osama/Programming/Java/Processing/GA2/data");
@@ -30,10 +31,12 @@ void draw(){
  stroke(4);
  fill(187, 252, 184, 150);
  text("Gen: " + ga.generation, 0, 0);
- for(int i = 0; i < cars.length; i++){
+ for(int i = 1; i < cars.length; i++){
    cars[i].update();
    cars[i].show();
  }
+ cars[0].update();
+ cars[0].show();
  ga.update();
  for(int i = 0; i < markers.size(); i++){
    markers.get(i).show();

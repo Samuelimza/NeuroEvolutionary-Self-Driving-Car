@@ -8,17 +8,22 @@ class GeneticAlgorithm{
   int previousSecond = -1;
   int timeoutLimit = 8;
   
+  int[] weightsChangedCounter = new int[5];
+  
   void update(){
     int second = second();
     if(second != previousSecond){
       counter++;
       previousSecond = second;
     }
-    if(counter == timeoutLimit){
+    if(counter >= timeoutLimit){
       reproduce();
+      println("Reproduced Due to timeout");
       counter = 0;
     }else if(allDead(cars)){
       reproduce();
+      println("Reproduced Due to allDead");
+      counter = 0;
     }
   }
   
@@ -32,16 +37,21 @@ class GeneticAlgorithm{
     }
     println("MaxFitness: " + maxFitness);
     Car[] nextGenCars = new Car[noOfCars];
-    nextGenCars[0] = new Car(370, 30);
+    nextGenCars[0] = new Car(370, 30, 1);
     nextGenCars[0].neuralNetwork = new NNetwork(cars[maxFitI].neuralNetwork);
     nextGenCars[0].isBest = true;
     for(int i = 1; i < cars.length; i++){
-      nextGenCars[i] = new Car(370, 30);
+      int species = (i / (noOfCars / 5)) + 1;
+      nextGenCars[i] = new Car(370, 30, species);
       nextGenCars[i].neuralNetwork = new NNetwork(chooseParent().neuralNetwork);
-      mutate(nextGenCars[i]);
+      weightsChangedCounter[nextGenCars[i].species - 1] += mutate(nextGenCars[i]);
     }
     cars = nextGenCars;
     generation++;
+    for(int i = 0; i < 5; i++){
+      println("Weights changed: " + weightsChangedCounter[i] / (noOfCars / 5) + ", species: " + i);
+      weightsChangedCounter[i] = 0;
+    }
   }
   
   Car chooseParent(){
@@ -53,25 +63,30 @@ class GeneticAlgorithm{
         return cars[i];
       }
     }
-    return new Car(370, 30);
+    return new Car(370, 30, 1);
   }
   
-  void mutate(Car car){
+  int mutate(Car car){
+    int counter = 0;
     for(int i = 0; i < car.neuralNetwork.weights.length; i++){
       for(int j = 0; j < car.neuralNetwork.weights[i].length; j++){
         for(int k = 0; k < car.neuralNetwork.weights[i][j].length; k++){
-          if(random(1) > car.mutationRate){
+          if(random(1) < car.mutationRate){
             if(random(1) >= 0.5){
               car.neuralNetwork.weights[i][j][k] += 0.1;
-              constrain(car.neuralNetwork.weights[i][j][k], -1, 1);
+              counter++;
+              //constrain(car.neuralNetwork.weights[i][j][k], -1, 1);
             }else{
               car.neuralNetwork.weights[i][j][k] -= 0.1;
-              constrain(car.neuralNetwork.weights[i][j][k], -1, 1);
+              counter++;
+              //constrain(car.neuralNetwork.weights[i][j][k], -1, 1);
             }
           }
         }
       }
     }
+    //println("Weights changed: " + counter + ", species: " + car.species);
+    return counter;
   }
   
   boolean allDead(Car[] cars){
