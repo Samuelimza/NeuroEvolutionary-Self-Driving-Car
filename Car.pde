@@ -8,7 +8,7 @@ class Car{
   float angle = PI;
   float angularVelocity = 0;
   float angularDrag = 0.9;
-  float power = 0.05;
+  float power = 0.10;
   float turnSpeed = 0.01;
   float braking = 0.95;
   
@@ -49,7 +49,7 @@ class Car{
   }
   
   void update(){
-    if(!dead){
+    if(!dead){ //<>//
       updateMarkerStatus();
       drawSensors();
       setControls();
@@ -106,10 +106,10 @@ class Car{
   
   //check for points near the periphery of the car that lie in the wall for collision detection
   boolean notOnTrack(){
-    int index0 = (int)pos.x + 7 + (int)pos.y * width;
-    int index1 = (int)pos.x - 7 + (int)pos.y * width;
-    int index2 = (int)pos.x + (int)(pos.y + 7) * width;
-    int index3 = (int)pos.x + (int)(pos.y - 7) * width;
+    int index0 = (int)pos.x + 7 + (int)pos.y * mapWidth;
+    int index1 = (int)pos.x - 7 + (int)pos.y * mapWidth;
+    int index2 = (int)pos.x + (int)(pos.y + 7) * mapWidth;
+    int index3 = (int)pos.x + (int)(pos.y - 7) * mapWidth;
     boolean condition0 = index0 < 0 || index1 < 0 || index2 < 0 || index3 < 0;
     boolean condition1 = index0 >= myMap.pixels.length || index1 >= myMap.pixels.length || index2 >= myMap.pixels.length || index3 >= myMap.pixels.length;
     if(!condition0 && !condition1){
@@ -156,7 +156,7 @@ class Car{
       //updating the posCopy vector to point a unit further in the heading direction passed 
       posCopy.add(heading);
       //checking if the head of the posCopy vector lies in a wall
-      if(myMap.pixels[(int)posCopy.x + ((int)posCopy.y) * width] == -16777216){
+      if(myMap.pixels[(int)posCopy.x + ((int)posCopy.y) * mapWidth] == -16777216){
         //fill(255, 0, 0);
         //ellipse(posCopy.x, posCopy.y, 5, 5);
         //setting the proximity value to the iteration number aka distance in the heading direction
@@ -187,8 +187,8 @@ class Car{
   }
   
   void show(){
-    noStroke();
-    pushMatrix(); //<>//
+    stroke(0);
+    pushMatrix();
     if(species == 1){
       // 1%
       fill(255, 255, 0, 150);

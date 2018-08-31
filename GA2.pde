@@ -1,14 +1,17 @@
+int mapWidth, mapHeight;
+
 int noOfCars = 50;
 Car[] cars = new Car[noOfCars];
 GeneticAlgorithm ga = new GeneticAlgorithm();
 ArrayList<Marker> markers;
 PImage myMap;
+PImage LeftView;
 
 PFont f;
 boolean manual = false;
 
 void setup(){
- size(600, 600);
+ size(1056, 600);
  textAlign(LEFT, TOP);
  //create font object of arial with 25 size
  f = createFont("Arial", 25, true);
@@ -16,7 +19,10 @@ void setup(){
  rectMode(CENTER);
  noStroke();
  myMap = loadImage("data/Map.png");
+ mapWidth = myMap.width;
+ mapHeight = myMap.height;
  myMap.loadPixels();
+ LeftView = loadImage("data/LeftView.png");
  for(int i = 0; i < cars.length; i++){
    int species = (i / (noOfCars / 5)) + 1;
    cars[i] = new Car(370, 30, species);
@@ -26,8 +32,11 @@ void setup(){
 }
 
 void draw(){
- //background(51);
- background(myMap);
+ background(51);
+ //background(myMap);
+ translate(228, 0);
+ image(LeftView, -228, 0);
+ image(myMap, 0, 0);
  stroke(4);
  fill(187, 252, 184, 150);
  text("Gen: " + ga.generation, 0, 0);
