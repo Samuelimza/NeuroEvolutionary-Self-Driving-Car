@@ -7,4 +7,7 @@ To run you would require the [Java Runtime Environment](http://www.oracle.com/te
 Or if you want to tweak the code while running you would require the [Processing integrated development environment](https://processing.org/download/)
 
 ## Usage
+To execute go to the applicatiion folder and run run.jar. The applicatiion has a gui that is easy to use.
 
+## Principle
+When you first launch the application a random generation of cars will be generated. After simulating once the Genetic Algorithm will kick in and apply genetic operators such as crossover, mutation etc, to give you another generation of cars derived from only the best ones in the previoius generation according to a fitness function that judges how well a car performs on the track
