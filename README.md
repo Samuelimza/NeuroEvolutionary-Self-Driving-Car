@@ -4,3 +4,4 @@ This project is an implementation of Self Driving Simulated cars that use a Neur
 
 ## Requirements
 To run you would require the [Java Runtime Environment](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+Or if you tweak the code while running you would rewuire the P[rocessing integrated development environment](https://processing.org/download/)
