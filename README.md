@@ -11,3 +11,10 @@ To execute go to the applicatiion folder and run run.jar. The applicatiion has a
 
 ## Principle
 When you first launch the application a random generation of cars will be generated. After simulating once the Genetic Algorithm will kick in and apply genetic operators such as crossover, mutation etc, to give you another generation of cars derived from only the best ones in the previoius generation according to a fitness function that judges how well a car performs on the track
+
+## Author
+Osama Ashhad Azmi ([Linkedin](https://www.linkedin.com/in/osama-azmi-a4b033162/))
+
+## Inspiration
+[How Artificial intelligence learns | Genetic Algorithm explained](https://www.youtube.com/watch?v=VnwjxityDLQ)
+[Evolution Simulator](https://www.youtube.com/watch?v=GOFws_hhZs8)
