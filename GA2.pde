@@ -31,7 +31,7 @@ void setup() {
   }
   markers = new ArrayList<Marker>();
   loadMarkers("D:/NewFolder/Osama/Programming/Java/Processing/GA2/data");
-  ga.loadGeneration("74RingaRoses");
+  //ga.loadGeneration("74RingaRoses");
   
   cp5 = new ControlP5(this);
   cp5.addTextfield("saveName").setPosition(832,30).setSize(200, 20).setFont(createFont("Arial", 18, true)).setFocus(false).setColor(color(255, 0, 0));
@@ -56,6 +56,7 @@ void draw() {
   }
   cars[0].update();
   cars[0].show();
+  //saveFrame("frames/try1/####.tga");
   ga.update();
   if (debugMode) {
     for (int i = 0; i < markers.size(); i++) {
