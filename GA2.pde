@@ -56,7 +56,6 @@ void draw() {
   }
   cars[0].update();
   cars[0].show();
-  //saveFrame("frames/try1/####.tga");
   ga.update();
   if (debugMode) {
     for (int i = 0; i < markers.size(); i++) {
