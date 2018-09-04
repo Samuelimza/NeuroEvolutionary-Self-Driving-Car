@@ -50,6 +50,8 @@ void draw() {
   line(828, 0, 828, 600);
   fill(187, 252, 184, 150);
   text("Gen: " + ga.generation, 0, 0);
+  text("Press 'd' to toggle", 842, 300);
+  text("debug mode.", 872, 330);
   for (int i = 1; i < cars.length; i++) {
     cars[i].update();
     cars[i].show();

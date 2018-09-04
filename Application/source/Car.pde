@@ -156,8 +156,10 @@ class Car {
       posCopy.add(heading);
       //checking if the head of the posCopy vector lies in a wall
       if (myMap.pixels[(int)posCopy.x + ((int)posCopy.y) * mapWidth] == -16777216) {
-        //fill(255, 0, 0);
-        //ellipse(posCopy.x, posCopy.y, 5, 5);
+        if (debugMode) {
+          fill(255, 0, 0);
+          ellipse(posCopy.x, posCopy.y, 5, 5);
+        }
         //setting the proximity value to the iteration number aka distance in the heading direction
         proximity[index][0] = i / 100.0;
         return;
@@ -172,15 +174,21 @@ class Car {
     heading.mult(100);
     stroke(200, 100, 60);
     //drawing for the -30 degree sensor
-    //line(pos.x, pos.y, pos.x + heading.x, pos.y + heading.y);
+    if (debugMode) {
+      line(pos.x, pos.y, pos.x + heading.x, pos.y + heading.y);
+    }
     findDistance(heading.copy(), 0);
     //drawing for the +30 degree sensor
     heading.rotate(PI / 3);
-    //line(pos.x, pos.y, pos.x + heading.x, pos.y + heading.y);
+    if (debugMode) {
+      line(pos.x, pos.y, pos.x + heading.x, pos.y + heading.y);
+    }
     findDistance(heading.copy(), 2);
     //drawing for the 0 degree sensor
     heading.rotate(-PI / 6);
-    //line(pos.x, pos.y, pos.x + heading.x, pos.y + heading.y);
+    if (debugMode) {
+      line(pos.x, pos.y, pos.x + heading.x, pos.y + heading.y);
+    }
     findDistance(heading.copy(), 1);
     //println(proximity[0][0] + ", " + proximity[1][0] + ", " + proximity[2][0]);
   }
