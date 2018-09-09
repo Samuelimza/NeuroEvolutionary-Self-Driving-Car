@@ -53,11 +53,17 @@ class GeneticAlgorithm { //<>//
     Car[] nextGenCars = new Car[noOfCars];
     if (maxFitI != -1) {
       nextGenCars[0] = new Car(370, 30, 1);
+      if (track == 3) {
+        nextGenCars[0].pos.y = startY[1];
+      }
       nextGenCars[0].neuralNetwork = new NNetwork(cars[maxFitI].neuralNetwork);
       nextGenCars[0].isBest = true;
     } else {
       int species = (((0 / (noOfCars / 5)) + 1) > 5) ? 5 : ((0 / (noOfCars / 5)) + 1);
       nextGenCars[0] = new Car(370, 30, species);
+      if (track == 3) {
+        nextGenCars[0].pos.y = startY[1];
+      }
       nextGenCars[0].neuralNetwork = new NNetwork(chooseParent().neuralNetwork);
       mutate(nextGenCars[0]);
     }
@@ -65,6 +71,9 @@ class GeneticAlgorithm { //<>//
       int species = (((i / (noOfCars / 5)) + 1) > 5) ? 5 : ((i / (noOfCars / 5)) + 1);
       ;
       nextGenCars[i] = new Car(370, 30, species);
+      if (track == 3) {
+        nextGenCars[i].pos.y = startY[1];
+      }
       nextGenCars[i].neuralNetwork = new NNetwork(chooseParent().neuralNetwork);
       mutate(nextGenCars[i]);
     }
@@ -81,6 +90,9 @@ class GeneticAlgorithm { //<>//
       if (runningSum >= luckyNumber) {
         return cars[i];
       }
+    }
+    if (track == 3) {
+      return new Car(370, startY[1], 1);
     }
     return new Car(370, 30, 1);
   }
@@ -117,6 +129,20 @@ class GeneticAlgorithm { //<>//
     return true;
   }
 
+  void setTestingCar() {
+    testingCar = new Car(370, 30, 1);
+    if (track == 3) {
+      testingCar.pos.y = startY[1];
+    }
+    for (int bestCarFindingIndex = 0; bestCarFindingIndex < cars.length; bestCarFindingIndex++) {
+      if (cars[bestCarFindingIndex].isBest) {
+        testingCar.neuralNetwork = new NNetwork(cars[bestCarFindingIndex].neuralNetwork);
+        testingCar.isBest = true;
+        break;
+      }
+    }
+  }
+
   void saveGeneration(Car[] cars, String saveName) {
     JSONArray generationArray = new JSONArray();
     JSONObject metaData = new JSONObject();
@@ -126,6 +152,7 @@ class GeneticAlgorithm { //<>//
     metaData.setFloat("power", cars[0].power);
     metaData.setFloat("turnSpeed", cars[0].turnSpeed);
     metaData.setFloat("braking", cars[0].braking);
+    metaData.setInt("proximitySensorLength", cars[0].proximitySensorLength);
     generationArray.setJSONObject(0, metaData);
     for (int carCounter = 0; carCounter < cars.length; carCounter++) {
       JSONObject carJSON = new JSONObject();
@@ -141,13 +168,14 @@ class GeneticAlgorithm { //<>//
       carJSON.setBoolean("isBest", cars[carCounter].isBest);
       generationArray.setJSONObject(carCounter + 1, carJSON);
     }
-    saveJSONArray(generationArray,"generations/" + saveName + ".json");
+    saveJSONArray(generationArray, "generations/metaDataGens/" + saveName + ".json");
   }
 
   void loadGeneration(String generationToLoad) {
     JSONArray generationArray = loadJSONArray("generations/" + generationToLoad + ".json");
     JSONObject metaData = generationArray.getJSONObject(0);
     float tempDrag = 0, tempAngularDrag = 0, tempPower = 0, tempTurnSpeed = 0, tempBraking = 0;
+    int tempProximitySensorLength = 0;
     boolean metaDataAvailable = true;
     try {
       generation = metaData.getInt("Generation");
@@ -156,6 +184,7 @@ class GeneticAlgorithm { //<>//
       tempPower = metaData.getFloat("power");
       tempTurnSpeed = metaData.getFloat("turnSpeed");
       tempBraking = metaData.getFloat("braking");
+      tempProximitySensorLength = metaData.getInt("proximitySensorLength");
     }
     catch(Exception exception) {
       metaDataAvailable = false;
@@ -164,12 +193,16 @@ class GeneticAlgorithm { //<>//
     Car[] loadedCars = new Car[noOfCars];
     for (int carCounter = 0; carCounter < noOfCars; carCounter++) {
       loadedCars[carCounter] = new Car(370, 30, 1);
+      if (track == 3) {
+        loadedCars[carCounter].pos.y = startY[1];
+      }
       if (metaDataAvailable) {
         loadedCars[carCounter].drag = tempDrag;
         loadedCars[carCounter].angularDrag = tempAngularDrag;
         loadedCars[carCounter].turnSpeed = tempTurnSpeed;
         loadedCars[carCounter].power = tempPower;
         loadedCars[carCounter].braking = tempBraking;
+        loadedCars[carCounter].proximitySensorLength = tempProximitySensorLength;
       }
       JSONObject carBrain = generationArray.getJSONObject(carCounter + 1);
       try {

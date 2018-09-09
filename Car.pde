@@ -17,6 +17,7 @@ class Car {
   float[][] proximity;
 
   //Genetic attributes
+  int proximitySensorLength = 200;
   int species;
   boolean isBest = false;
   float fitness = 0;
@@ -49,7 +50,9 @@ class Car {
 
   void update() {
     if (!dead) {
-      updateMarkerStatus();
+      if (!testing) {
+        updateMarkerStatus();
+      }
       drawSensors();
       setControls();
       if (acc) {
@@ -151,7 +154,7 @@ class Car {
   void findDistance(PVector heading, int index) {
     PVector posCopy = this.pos.copy();
     heading.setMag(1);
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < proximitySensorLength; i++) {
       //updating the posCopy vector to point a unit further in the heading direction passed 
       posCopy.add(heading);
       //checking if the head of the posCopy vector lies in a wall
@@ -161,7 +164,7 @@ class Car {
           ellipse(posCopy.x, posCopy.y, 5, 5);
         }
         //setting the proximity value to the iteration number aka distance in the heading direction
-        proximity[index][0] = i / 100.0;
+        proximity[index][0] = i / (float)proximitySensorLength;
         return;
       }
     }
@@ -171,7 +174,7 @@ class Car {
   //drawSensors uses cars angle heading to draw proximity sensors and pass arguments to the proximity findDistance function.
   void drawSensors() {
     PVector heading = PVector.fromAngle(angle - PI / 6);
-    heading.mult(100);
+    heading.mult(proximitySensorLength);
     stroke(200, 100, 60);
     //drawing for the -30 degree sensor
     if (debugMode) {
