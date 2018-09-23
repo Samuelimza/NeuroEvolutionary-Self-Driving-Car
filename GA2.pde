@@ -54,6 +54,7 @@ void setup() {
   cp5.addTextfield("loadName").setPosition(832, 130).setSize(200, 20).setFont(createFont("Arial", 18, true)).setFocus(false).setColor(color(255, 0, 0));
   cp5.addButton("Load").setPosition(837, 170).setSize(100, 40);
   cp5.addButton("LoadBest").setPosition(947, 170).setSize(100, 40);
+  //cp5.setAutoDraw(false);
 }
 
 void draw() {
@@ -62,6 +63,7 @@ void draw() {
   //translate(228, 0);
   image(LeftView, 600, 0);//-228, 0);
   image(myMap, 0, 0);
+  //cp5.draw();
   stroke(4);
   line(828, 0, 828, 600);
   fill(187, 252, 184, 150);
@@ -78,6 +80,12 @@ void draw() {
     testingCar.update();
     testingCar.show();
   }
+  
+  //if(keyPressed) {
+  //  saveFrame("cp5-screenshot.jpg");
+  //  println("screenshot saved, includes cp5 controllers.");
+  //}
+  
   //if (debugMode) {
   //  for (int i = 0; i < markers.size(); i++) {
   //    markers.get(i).show();
