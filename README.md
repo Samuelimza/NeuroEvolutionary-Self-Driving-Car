@@ -2,7 +2,7 @@
 A self driving car equipped with a Neural Network that is evolved using a Genetic Algorithm.
 This project is an implementation of Self Driving Simulated cars that use a Neural Network by providing the immediate sorrounding proximity as input and the output to guide them through the sorrounding.
 
-<img src="https://user-images.githubusercontent.com/34769156/44947200-36bb4400-ae27-11e8-83d7-47424ba8de4b.gif" width="900" height="506" />
+<img src="https://user-images.githubusercontent.com/34769156/46087938-fd2ced00-c1c8-11e8-85fe-292bb6108554.gif" width="900" height="506" />
 
 Watch full Evolution here: [Self Driving Neural Network cars evolve using a Genetic Algorithm](https://www.youtube.com/watch?v=Y0UHduAtXes)
 
