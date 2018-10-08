@@ -1,51 +1,58 @@
+import java.text.MessageFormat;
 import controlP5.ControlP5;
 import controlP5.Textfield;
 import controlP5.Button;
 
-ControlP5 cp5;
-int mapWidth, mapHeight;
+private ControlP5 cp5;
+private MessageFormat genCounterFormatter;
+public int mapWidth, mapHeight;
 
-int track = 2;
+public int track = 1;
+public String mapPath;
+private final String leftViewPath = "data/LeftView.png",
+markersPath = "data/markers1.json";
 
-//Starting positioons for diffenret tracks
-int[] startX = {370, 370};
-int[] startY = {30, 70};
+//Starting positions for diffenret tracks
+public int[] startX = {370, 370};
+public int[] startY = {30, 70};
 
-int noOfCars = 50;
-Car[] cars = new Car[noOfCars];
-Car testingCar;
-GeneticAlgorithm ga = new GeneticAlgorithm();
-ArrayList<Marker> markers;
-PImage myMap;
-PImage LeftView;
+public int noOfCars = 50;
+public Car[] cars = new Car[noOfCars];
+public Car testingCar;
+public GeneticAlgorithm ga = new GeneticAlgorithm();
+public ArrayList<Marker> markers;
+public PImage myMap;
+private PImage LeftView;
 
-PFont f;
-boolean debugMode = true;
-boolean testing = false;
+private PFont font;
+public boolean debugMode = true;
+public boolean testing = false;
 
-void setup() {
+public void setup() {
   size(1056, 600);
   textAlign(LEFT, TOP);
   //create font object of arial with 25 size
-  f = createFont("Arial", 25, true);
-  textFont(f);
+  font = createFont("Arial", 25, true);
+  textFont(font);
   rectMode(CENTER);
   noStroke();
-  myMap = loadImage("data/tracks/track" + track + ".png");
+  genCounterFormatter = new MessageFormat("Gen: {0}");
+  mapPath = new MessageFormat("data/tracks/track{0}.png").format(new Object[] {track});
+  myMap = loadImage(mapPath);
   mapWidth = myMap.width;
   mapHeight = myMap.height;
-  println(mapWidth + ", " + mapHeight);
   myMap.loadPixels();
-  LeftView = loadImage("data/LeftView.png");
+  LeftView = loadImage(leftViewPath);
   for (int i = 0; i < cars.length; i++) {
     int species = (i / (noOfCars / 5)) + 1;
     cars[i] = new Car(370, 30, species);
-    if(track == 3){
+    if (track == 3) {
       cars[i].pos.y = startY[1];
     }
   }
+  
   markers = new ArrayList<Marker>();
-  loadMarkers("D:/NewFolder/Osama/Programming/Java/Processing/GA2/data");
+  loadMarkers();
   //ga.loadGeneration("74RingaRoses");
 
   cp5 = new ControlP5(this);
@@ -57,7 +64,7 @@ void setup() {
   //cp5.setAutoDraw(false);
 }
 
-void draw() {
+public void draw() {
   background(51);
   //background(myMap);
   //translate(228, 0);
@@ -68,29 +75,29 @@ void draw() {
   line(828, 0, 828, 600);
   fill(187, 252, 184, 150);
   if (!testing) {
-    text("Gen: " + ga.generation, 0, 0);
+    text(genCounterFormatter.format(new Object[] {ga.generation}), 0, 0);
     for (int i = 1; i < cars.length; i++) {
-      cars[i].update();
-      cars[i].show();
+      cars[i].updateCarState();
+      cars[i].renderCar();
     }
-    cars[0].update();
-    cars[0].show();
-    ga.update();
+    cars[0].updateCarState();
+    cars[0].renderCar();
+    ga.updateGeneticAlgorithmState();
   } else {
-    testingCar.update();
-    testingCar.show();
+    testingCar.updateCarState();
+    testingCar.renderCar();
   }
-  
+
   //if(keyPressed) {
   //  saveFrame("cp5-screenshot.jpg");
   //  println("screenshot saved, includes cp5 controllers.");
   //}
-  
-  //if (debugMode) {
-  //  for (int i = 0; i < markers.size(); i++) {
-  //    markers.get(i).show();
-  //  }
-  //}
+
+  if (debugMode) {
+    for (int i = 0; i < markers.size(); i++) {
+      markers.get(i).renderMarker();
+    }
+  }
 }
 
 public void Save() {
@@ -110,15 +117,15 @@ public void LoadBest() {
   ga.setTestingCar();
 }
 
-void loadMarkers(String path) {
-  JSONArray markersArray = loadJSONArray(path + "/markers1.json");
+public void loadMarkers() {
+  JSONArray markersArray = loadJSONArray(markersPath);
   for (int i = 0; i < 22; i++) {
     JSONObject mj = markersArray.getJSONObject(i);
     markers.add(new Marker(mj.getInt("x"), mj.getInt("y"), mj.getInt("w"), mj.getInt("h"), mj.getInt("index"), mj.getInt("score")));
   }
 }
 
-void keyPressed() {
+public void keyPressed() {
   if (key == ' ') {
     ga.reproduce();
   }

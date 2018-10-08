@@ -1,19 +1,25 @@
-class GeneticAlgorithm { //<>//
-  float totalFitness;
-  float maxFitness = -1;
-  int maxFitI = -1;
-  int generation = 0;
+public class GeneticAlgorithm { //<>//
+  private MessageFormat loadSavePathFormatter;
 
-  int counter = 0;
-  int activity = 0;
-  int lastActivity = 0;
-  int lastActivitySecond = second();
-  int previousSecond = -1;
-  int timeoutLimit = 8;
+  private float totalFitness;
+  private float maxFitness = -1;
+  private int maxFitnessIndex = -1;
+  public int generation = 0;
 
-  float[] lastTenMaxFitnesses = new float[10];
+  private int counter = 0;
+  public int activity = 0;
+  private int lastActivity = 0;
+  private int lastActivitySecond = second();
+  private int previousSecond = -1;
+  public int timeoutLimit = 8;
 
-  void update() {
+  private float[] lastTenMaxFitnesses = new float[10];
+
+  public GeneticAlgorithm() {
+    loadSavePathFormatter = new MessageFormat("generations/metaDataGens/{0}.json");
+  }
+
+  public void updateGeneticAlgorithmState() {
     int second = second();
     if (second != previousSecond) {
       counter++;
@@ -38,27 +44,33 @@ class GeneticAlgorithm { //<>//
     }
   }
 
-  void reproduce() {
-    maxFitness = 0;
+  private float findMaxFitnessAndIndex() {
     for (int i = 0; i < cars.length; i++) {
       if (cars[i].fitness > maxFitness) {
         maxFitness = cars[i].fitness;
-        maxFitI = i;
+        maxFitnessIndex = i;
       }
     }
     if (generation < 10) {
       lastTenMaxFitnesses[generation] = maxFitness;
     }
     println("MaxFitness: " + maxFitness);
+    return maxFitness;
+  }
+
+  public void reproduce() {
     Car[] nextGenCars = new Car[noOfCars];
-    if (maxFitI != -1) {
+    maxFitness = findMaxFitnessAndIndex();
+    if (maxFitnessIndex != -1) {
+      //If there is a maxFitness car, copy it as it is
       nextGenCars[0] = new Car(370, 30, 1);
       if (track == 3) {
         nextGenCars[0].pos.y = startY[1];
       }
-      nextGenCars[0].neuralNetwork = new NNetwork(cars[maxFitI].neuralNetwork);
+      nextGenCars[0].neuralNetwork = new NNetwork(cars[maxFitnessIndex].neuralNetwork);
       nextGenCars[0].isBest = true;
     } else {
+      //If there isn't then fill index 0 by a random generated
       int species = (((0 / (noOfCars / 5)) + 1) > 5) ? 5 : ((0 / (noOfCars / 5)) + 1);
       nextGenCars[0] = new Car(370, 30, species);
       if (track == 3) {
@@ -82,7 +94,7 @@ class GeneticAlgorithm { //<>//
     lastActivity = second();
   }
 
-  Car chooseParent() {
+  private Car chooseParent() {
     float luckyNumber = random(totalFitness);
     float runningSum = 0;
     for (int i = 0; i < cars.length; i++) {
@@ -97,7 +109,7 @@ class GeneticAlgorithm { //<>//
     return new Car(370, 30, 1);
   }
 
-  int mutate(Car car) {
+  private int mutate(Car car) {
     int counter = 0;
     for (int i = 0; i < car.neuralNetwork.weights.length; i++) {
       for (int j = 0; j < car.neuralNetwork.weights[i].length; j++) {
@@ -120,7 +132,7 @@ class GeneticAlgorithm { //<>//
     return counter;
   }
 
-  boolean allDead(Car[] cars) {
+  private boolean allDead(Car[] cars) {
     for (int i = 0; i < cars.length; i++) {
       if (!cars[i].dead) {
         return false;
@@ -129,7 +141,7 @@ class GeneticAlgorithm { //<>//
     return true;
   }
 
-  void setTestingCar() {
+  public void setTestingCar() {
     testingCar = new Car(370, 30, 1);
     if (track == 3) {
       testingCar.pos.y = startY[1];
@@ -143,8 +155,7 @@ class GeneticAlgorithm { //<>//
     }
   }
 
-  void saveGeneration(Car[] cars, String saveName) {
-    JSONArray generationArray = new JSONArray();
+  private JSONObject metaDataJSONObject() {
     JSONObject metaData = new JSONObject();
     metaData.setInt("Generation", generation);
     metaData.setFloat("drag", cars[0].drag);
@@ -153,6 +164,12 @@ class GeneticAlgorithm { //<>//
     metaData.setFloat("turnSpeed", cars[0].turnSpeed);
     metaData.setFloat("braking", cars[0].braking);
     metaData.setInt("proximitySensorLength", cars[0].proximitySensorLength);
+    return metaData;
+  }
+
+  public void saveGeneration(Car[] cars, String saveName) {
+    JSONArray generationArray = new JSONArray();
+    JSONObject metaData = metaDataJSONObject();
     generationArray.setJSONObject(0, metaData);
     for (int carCounter = 0; carCounter < cars.length; carCounter++) {
       JSONObject carJSON = new JSONObject();
@@ -168,11 +185,11 @@ class GeneticAlgorithm { //<>//
       carJSON.setBoolean("isBest", cars[carCounter].isBest);
       generationArray.setJSONObject(carCounter + 1, carJSON);
     }
-    saveJSONArray(generationArray, "generations/metaDataGens/" + saveName + ".json");
+    saveJSONArray(generationArray, loadSavePathFormatter.format(new Object[] {saveName}));
   }
 
-  void loadGeneration(String generationToLoad) {
-    JSONArray generationArray = loadJSONArray("generations/" + generationToLoad + ".json");
+  public void loadGeneration(String generationToLoad) {
+    JSONArray generationArray = loadJSONArray(loadSavePathFormatter.format(new Object[] {generationToLoad}));
     JSONObject metaData = generationArray.getJSONObject(0);
     float tempDrag = 0, tempAngularDrag = 0, tempPower = 0, tempTurnSpeed = 0, tempBraking = 0;
     int tempProximitySensorLength = 0;
@@ -186,7 +203,7 @@ class GeneticAlgorithm { //<>//
       tempBraking = metaData.getFloat("braking");
       tempProximitySensorLength = metaData.getInt("proximitySensorLength");
     }
-    catch(Exception exception) {
+    catch(Exception RuntimeException) {
       metaDataAvailable = false;
     }
     noOfCars = generationArray.size() - 1;

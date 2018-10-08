@@ -1,8 +1,8 @@
-class Marker{
-  int score = 0, index;
-  int x, y, w, h;
+public class Marker{
+  public int score = 0, index;
+  private int x, y, w, h;
   
-  Marker(int x, int y, int w, int h, int index, int score){
+  public Marker(int x, int y, int w, int h, int index, int score){
     this.index = index;
     this.score = score;
     this.x = x;
@@ -11,14 +11,14 @@ class Marker{
     this.h = h;
   }
   
-  boolean colliding(Car car){
+  public boolean colliding(Car car){
     if(car.pos.x > x - w / 2 && car.pos.x < x + w / 2 && car.pos.y > y - h / 2 && car.pos.y < y + h / 2){
       return true;
     }
     return false;
   }
 
-  void show(){
+  public void renderMarker(){
     rectMode(CENTER);
     stroke(255, 0, 0);
     noFill();
